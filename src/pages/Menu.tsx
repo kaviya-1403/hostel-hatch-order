@@ -6,6 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart, Plus, Minus, Wallet, LogOut, ClipboardList } from "lucide-react";
+import menuBanner from "@/assets/menu-banner.jpg";
+import foodIdli from "@/assets/food-idli.jpg";
+import foodDosa from "@/assets/food-dosa.jpg";
+import foodTea from "@/assets/food-tea.jpg";
+import foodBiryani from "@/assets/food-biryani.jpg";
+import foodSamosa from "@/assets/food-samosa.jpg";
+import foodPanipuri from "@/assets/food-panipuri.jpg";
+import foodSandwich from "@/assets/food-sandwich.jpg";
 
 interface FoodItem {
   id: string;
@@ -28,6 +36,17 @@ const Menu = () => {
   const [profile, setProfile] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Image mapping
+  const foodImages: Record<string, string> = {
+    "Idli Sambar": foodIdli,
+    "Masala Dosa": foodDosa,
+    "Chai": foodTea,
+    "Veg Biryani": foodBiryani,
+    "Samosa": foodSamosa,
+    "Pani Puri": foodPanipuri,
+    "Sandwich": foodSandwich,
+  };
 
   useEffect(() => {
     checkAuth();
@@ -138,19 +157,29 @@ const Menu = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h2 className="mb-2 text-3xl font-bold">Welcome, {profile?.full_name}!</h2>
-          <p className="text-muted-foreground">Browse our menu and place your order</p>
+      {/* Hero Banner */}
+      <div className="relative h-48 overflow-hidden md:h-64">
+        <img 
+          src={menuBanner} 
+          alt="MEC Canteen Menu" 
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-white md:text-4xl">Welcome, {profile?.full_name}!</h2>
+            <p className="text-white/90 mt-2">Browse our menu and place your order</p>
+          </div>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 py-8">
         {/* Menu Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {foodItems.map((item) => (
-            <Card key={item.id} className="overflow-hidden transition-all hover:shadow-[var(--shadow-hover)]">
+            <Card key={item.id} className="overflow-hidden transition-all hover:shadow-lg">
               <div className="aspect-video bg-muted">
-                {item.image_url ? (
-                  <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
+                {foodImages[item.name] ? (
+                  <img src={foodImages[item.name]} alt={item.name} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full items-center justify-center text-4xl">🍽️</div>
                 )}
